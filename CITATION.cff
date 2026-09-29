@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "WestQuant CUDA-Q"
+type: software
+authors:
+  - given-names: "David"
+    family-names: "Vesterlund"
+    affiliation: "WestQuant Open"
+repository-code: "https://github.com/WestQuantOpen/westquant-cudaq"
+url: "https://github.com/WestQuantOpen/westquant-cudaq"
+license: Apache-2.0
+version: "0.1.0"
+date-released: "2026-09-29"
