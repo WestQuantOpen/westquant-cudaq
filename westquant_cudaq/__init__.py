@@ -12,7 +12,7 @@ from dataclasses import asdict, dataclass, field, replace
 from enum import Enum
 from typing import Any, Callable, Iterable, Mapping, Protocol, Sequence
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 class Engine(str, Enum):
@@ -474,3 +474,17 @@ __all__ = [
     "normalize_workload",
     "search_representations",
 ]
+
+
+def __getattr__(name: str) -> Any:
+    """Lazy access to the GPU batch simulator (``westquant_cudaq.batched``).
+
+    Importing :mod:`westquant_cudaq` stays dependency-free; the batched engine (NumPy, optional CuPy,
+    optional Qiskit) is only imported when it is first used.
+    """
+    if name == "batched":
+        import importlib
+
+        return importlib.import_module(".batched", __name__)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
