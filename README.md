@@ -106,6 +106,19 @@ WestQuant never executes an unverified representation candidate. Constraints for
 
 `execute_cudaq` imports CUDA-Q lazily and supports kernel execution, sampling, and observation. No CUDA dependency is imported when using only planning and passport APIs.
 
+## Batched GPU simulation for data generation (new in 0.2.0)
+
+`westquant_cudaq.batched` simulates thousands of small circuits per GPU batch (one batched matrix product per gate
+step), with optional Pauli-trajectory noise, readout error, shots and Parquet output with full provenance. It includes
+a `wq-batch` command and Slurm scripts for A100 clusters (`scripts/hpc/`).
+
+```bash
+pip install "westquant-cudaq[batched,gpu]"
+wq-batch run --manifest shard.jsonl --out shard.parquet --noise noise.json --trajectories 200 --shots 1000
+```
+
+See [docs/BATCHED.md](docs/BATCHED.md).
+
 ## Relationship to WestQuant Open
 
 - `westquant-core`: WQIR, RepGraph, plugin contracts, and generic search.

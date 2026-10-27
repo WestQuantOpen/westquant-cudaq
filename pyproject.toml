@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "westquant-cudaq"
-version = "0.1.0"
-description = "Representation-aware CUDA-Q execution planning, GPU/QPU allocation, and reproducibility"
+version = "0.2.0"
+description = "Representation-aware CUDA-Q execution planning, GPU/QPU allocation, reproducibility, and batched GPU simulation for data generation"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 authors = [{name = "WestQuant Open"}]
-keywords = ["quantum", "cuda-q", "cuquantum", "optimization", "scheduling", "gpu", "qpu"]
+keywords = ["quantum", "cuda-q", "cuquantum", "optimization", "scheduling", "gpu", "qpu", "simulation", "dataset"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
@@ -25,17 +25,24 @@ dependencies = []
 [project.optional-dependencies]
 cudaq = ["cudaq>=0.12"]
 westquant = ["westquant-core>=0.2.0", "westquant-bridges>=0.1.0", "westquant-orchestrator>=0.1.0", "westquant-qcsc>=0.1.0"]
-test = ["pytest>=8"]
+# Batched simulator: CPU path (NumPy) + circuit import + Parquet output
+batched = ["numpy>=1.24", "qiskit>=1.0", "pyarrow>=14"]
+# GPU path for the batched simulator (CUDA 12; use cupy-cuda11x on CUDA 11, cupy-rocm-* on AMD)
+gpu = ["cupy-cuda12x>=13"]
+test = ["pytest>=8", "numpy>=1.24", "qiskit>=1.0", "pyarrow>=14"]
+
+[project.scripts]
+wq-batch = "westquant_cudaq.batched.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/WestQuantOpen/westquant-cudaq"
 Documentation = "https://github.com/WestQuantOpen/westquant-cudaq#readme"
 Issues = "https://github.com/WestQuantOpen/westquant-cudaq/issues"
 
-[tool.setuptools]
-py-modules = ["westquant_cudaq"]
+[tool.setuptools.packages.find]
+include = ["westquant_cudaq*"]
 
 [tool.pytest.ini_options]
 addopts = "-q"
-testpaths = ["."]
+testpaths = ["tests"]
 python_files = ["test_*.py"]
